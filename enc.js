@@ -5,11 +5,11 @@ let express= require("express");
 let path=require("path");
 let crypto=require("crypto");
 let fs=require("fs");
+const { console } = require("inspector");
 
 let app=express();
 app.use(express.json());
 app.use(cors());
-let uploadPath= path.join(__dirname,"uploads");
 //Setting Multer stortage =>>> Destination and filename
 let storage=multer.diskStorage({
     destination: (req,file,cb)=>{
@@ -21,45 +21,49 @@ let storage=multer.diskStorage({
           }
 });
 //Building the encryption FUnctions....
-let iv=crypto.randomBytes(16);
-let key =crypto.randomBytes(32);
-let algorithm="aes-256-cbc";
-let encrypt=(file,key,iv,algorithm)=>{
-  let readStream=fs.createReadStream(file);
-  let writeStream=fs.createWriteStream(file);
-  let cipher = crypto.createCipheriv(algorithm,key,iv);
 
-  readStream.on("data",(chunk)=>{
-   try{
-    let enc=cipher.update(chunk);
-    writeStream.write(enc);
-   }catch(err) {if(err) throw err}
-    
-  }) 
-  readStream.on("end",()=>{
-    try{
-        let enc = cipher.final();
-        writeStream.write(enc);
-        writeStream.end()
-    }catch(err){
-     if(err){throw err}
-    }
-   })
-   writeStream.on("finish",()=>{
-    console.log("Finishe Encryption...")
-  })
-};
-encrypt("./uploads/file.txt",key,iv,algorithm)
-//End of Encryption Function.....
 
 //Setting multer middleware
 let upload = multer({storage:storage});
-app.post("/securefile/upload/Encrypt",upload.single("file"),(req,res)=>{ 
+app.post ("/securefile/upload/Encrypt",upload.single("file"),(req,res)=>{ 
+  let iv=crypto.randomBytes(16);
+  let key =crypto.randomBytes(32);
+  let algorithm="aes-256-cbc";
+  let filePath=req.file.filepath;
+  let encrypt=(filePath,key,iv,algorithm)=>{
+  let readStream=fs.createReadStream(filePath);
+  let writeStream=fs.createWriteStream(filePath);
+  let cipher = crypto.createCipheriv(algorithm,key,iv);
+    readStream.on("data",(chunk)=>{
+     try{
+      let enc=cipher.update(chunk);
+      writeStream.write(enc);
+     }catch(err) {if(err) throw err}
+      
+    }) 
+    readStream.on("end",()=>{
+      try{
+          let enc = cipher.final();
+          writeStream.write(enc);
+          writeStream.end()
+      }catch(err){
+       if(err){throw err}
+      }
+     })
+     writeStream.on("finish",()=>{
+      console.log("Finishe Encryption...")
+    })
+  };
+  console.log(filePath)
+  // encrypt(filePath,key,iv,algorithm)
+  //End of Encryption Function.....
+
+  //Sending Response
    res.json({
     message:"Successful Encrypted",
     file:req.file,
 })
-   console.log("The route was hit, success")
+   console.log(req.file)
 })
 
 
