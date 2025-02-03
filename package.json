@@ -1,0 +1,25 @@
+{
+  "name": "serverside",
+  "version": "1.0.0",
+  "description": "Backend For FileEncryption App",
+  "keywords": [
+    "secure",
+    "file",
+    "redone"
+  ],
+  "license": "ISC",
+  "author": "Miranda NIgel",
+  "type": "commonjs",
+  "main": "enc.js",
+  "scripts": {
+    "test": "test",
+    "dev":"nodemon enc.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.1.9",
+    "uuid": "^11.0.5"
+  }
+}
