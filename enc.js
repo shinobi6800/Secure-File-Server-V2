@@ -55,7 +55,7 @@ app.post ("/securefile/upload/Encrypt",upload.single("file"),(req,res)=>{
     })
   };
   console.log(filePath)
-  // encrypt(filePath,key,iv,algorithm)
+  encrypt(filePath,key,iv,algorithm)
   //End of Encryption Function.....
 
   //Sending Response
