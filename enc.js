@@ -17,7 +17,7 @@ let storage=multer.diskStorage({
     },
     filename:
           (req,file,cb)=>{
-              cb(null,`${uuid.v4()}__${Date.now()}_ ${file.originalname}`)
+              cb(null,`${uuid.v4()}__${Date.now()}_ ${file.originalname}`);
           }
 });
 //Building the encryption FUnctions....
