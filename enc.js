@@ -65,7 +65,7 @@ app.post ("/securefile/upload/Encrypt",upload.single("file"),(req,res)=>{
 })
    console.log(req.file)
 })
-
+ //Bugs fixes soon coming .... Wait until i can understand my own code.....
 
 
 
